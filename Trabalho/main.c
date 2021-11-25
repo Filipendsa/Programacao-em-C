@@ -39,7 +39,7 @@ void comprarProdutos(char produtoA[][30], int tamanho)
     char produto[30], charCpf[12];
     printf("\n\nDIGITE O SEU CPF PARA A COMPRA: \n->");
     scanf("%lld", &cpf);
-    lltoa(cpf,charCpf,10);
+    lltoa(cpf, charCpf, 10);
     printf("\n%s", charCpf);
 
     FILE *arquivo;
@@ -100,7 +100,6 @@ void ListarProdutos(int opcao)
 
     while (!feof(arquivo))
     {
-
         fscanf(arquivo, "%s", &arrayProduto[i][0]);
         printf("%s\n", arrayProduto[i]);
         i++;
