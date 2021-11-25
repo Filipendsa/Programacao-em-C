@@ -21,7 +21,7 @@ FILE *AbreArquivo(char modo, char caminho[30])
     }
     if (arquivo == NULL)
     {
-        printf("Nao foi possivel abrir o arquivo");
+        printf("NAO FOI POSSIVEL ABRIR O ARQUIVO!");
         exit(0);
     }
     return arquivo;
@@ -34,17 +34,25 @@ void FecharArquivo(FILE *arquivo)
 
 void comprarProdutos(char produtoA[][30], int tamanho)
 {
-    int n, c = 0, opcao = 0, qtd, cpf = 0, count = 0;
-    char produto[30], carrinho[tamanho][30];
-    printf("\nDigite o seu CPF para a Compra: ");
-    scanf("%d", &cpf);
+    int n, c = 0, opcao = 0, qtd, count = 0;
+    long long int cpf = 0;
+    char produto[30], charCpf[12];
+    printf("\n\nDIGITE O SEU CPF PARA A COMPRA: \n->");
+    scanf("%lld", &cpf);
+    lltoa(cpf,charCpf,10);
+    printf("\n%s", charCpf);
+
+    FILE *arquivo;
+    arquivo = AbreArquivo('a', "bancoDados/vendas.txt");
+    fprintf(arquivo, "CPF - %s\n", charCpf);
+
     do
     {
-        printf("\nEscolha o produto:  (Ex. 'Arroz' 2)\n");
+        printf("\n\nESCOLHA O PRODUTO: (Ex. 'Arroz' )\n->");
         setbuf(stdin, NULL);
         gets(produto);
 
-        printf("Agora a quantidade: (Ex. Arroz '2', (pacotes))");
+        printf("\n\nESCOLHA A QUANTIDADE: (Ex. '2' (NUMERO DE PACOTES))\n->");
         scanf("%d", &qtd);
 
         int result = 0;
@@ -53,25 +61,24 @@ void comprarProdutos(char produtoA[][30], int tamanho)
             result = strncmp(produto, produtoA[n], 30);
             if (result == 0)
             {
-                carrinho[c][0] = produto;
+                produto[n] += produto[30];
                 c++;
             }
         }
         if (c == 0)
         {
-            printf("Produto nao cadastrado!");
+            printf("\n\nPRODUTO NAO CADASTRADO!\n\n");
         }
-        printf("\nDeseja finalizar a compra? (0-> nao  1-> sim)");
+        else
+        {
+            fprintf(arquivo, "%s - %d\n", produto, qtd);
+        }
+
+        printf("\n\nDESEJA FINALIZAR A COMPRA? \n0-> nao \n1-> sim\n-->");
         scanf("%d", &opcao);
+
     } while (opcao == 0);
 
-    FILE *arquivo;
-    arquivo = AbreArquivo('a', "bancoDados/vendas.txt");
-    fprintf(arquivo, "Inicio da Compra, CPF - %d\n", cpf);
-    for (int l = 0; l < c; l++)
-    {
-        fprintf(arquivo, "%s - %d\n", carrinho[l], qtd);
-    }
     fprintf(arquivo, "\n");
     FecharArquivo(arquivo);
 }
@@ -108,15 +115,13 @@ void ListarProdutos(int opcao)
 void ListarVendas()
 {
     FILE *arquivo;
-    char produto[30];
-    int quantidade;
-
+    char produto[30], quantidade[30];
     arquivo = AbreArquivo('l', "bancoDados/vendas.txt");
 
     while (!feof(arquivo))
     {
-        fscanf(arquivo, "%s - %d ", &produto, &quantidade);
-        printf("Produtos: %s  -  Quantidade: %d\n", produto, quantidade);
+        fscanf(arquivo, "%s - %s ", &produto, &quantidade);
+        printf("%s  -  %s\n", produto, quantidade);
     }
     FecharArquivo(arquivo);
 }
@@ -132,32 +137,34 @@ void ListarClientes()
     while (!feof(arquivo))
     {
         fscanf(arquivo, "%s %d ", &nome, &telefone);
-        printf("Nome: %s  -  Telefone: %d\n", nome, telefone);
+        printf("NOME: %s  -  TELEFONE: %d\n", nome, telefone);
     }
     FecharArquivo(arquivo);
 }
 void arte()
 {
     system("cls");
-    printf("          .:-:::::::...                              ");
-    printf("\n    :+#$$$$$$#####+                                ");
-    printf("\n  .*###$$$$$$$$$$$+===-----------=================-");
-    printf("\n  .####$$########$**+++**++++++++++++++++======---=");
-    printf("\n  .####$##########*##*#$$##*++++++=++======----+++=");
-    printf("\n  .####$########$#*$$$##$###*=========--------+*##*");
-    printf("\n  .#$$#$##########*$$$$###$#+---------:--==*++#*##*");
-    printf("\n  .$$$$$######*++**$$$#####$+==:::..===****$###*###");
-    printf("\n  .$$$$$##***#*++**$#$$##$#$#=*+++=***+##*$######$#");
-    printf("\n  .$$$$$##*********$######$#*=##++#######$$$##$$$$#");
-    printf("\n  .$$$$$##*********$$#$######**+=*#$$$$$#$$$$$$$$$#");
-    printf("\n  .$$$$$###********##==*##=:::::=+*####$$$$$$$$@$$#");
-    printf("\n  .$$$$$########*#*+---:==---:::---=+*###$@@@@@@@$#");
-    printf("\n  .$$$$$##########**+++####*+*#**#############$$$##");
-    printf("\n  .$$$$$#########*##***##########$$##############* ");
-    printf("\n  .$$$$$$$$$$$$$$$+              .$#               ");
-    printf("\n  .#$$$$$$$$$*#$$$+         -=---=$$---==:         ");
-    printf("\n    :+$$$$$$$$$###-        :##*+++#*+++*##.        ");
-    printf("\n\n\tBem Vindo ao programa da nossa Loja\n");
+    printf("...............................................................................");
+    printf("\n...............................................................................");
+    printf("\n...............................................................................");
+    printf("\n...............................................................................");
+    printf("\n.......#WW:.............+WWWWWWWWWWW#-......-####===#W#===#@@-..#WW*...........");
+    printf("\n.......#WW*............#W#.......-=WWW@.............:W*........+W@*W=..........");
+    printf("\n.......*WW*...........*W@............#W+............-W*........#W+.:W+.........");
+    printf("\n.......*WW+...........@W+............#W+............-W=.......:W#...+W+........");
+    printf("\n.......*WW+..........-WW-............#W-............-W#.......@W:....@W:.......");
+    printf("\n.......+WW+..........-W#.............#W-............-W@......+WWWWWWWWW@.......");
+    printf("\n.......:WW+..........-W#............:WW.............-WW-....-WW***+:::#W*......");
+    printf("\n.......-WW+...........=W-...........@W*...=W:.......:WW-....@W+........@W......");
+    printf("\n........WW+............=W:.........#W#....+W*......+WW=....@W=.........:W@.....");
+    printf("\n........WW:.............-#WW@@@@@WW@:......=W:....#WW:....#W#...........+W=....");
+    printf("\n........@WWWWWWWWWWWWWW#....................:WWWWW#:......+*.............+*....");
+    printf("\n...............................................................................");
+    printf("\n...............................................................................");
+    printf("\n...........FELIPE NOGUEIRA........HENRIQUE SS........HENRIQUE PALMA............");
+    printf("\n...............................................................................");
+    printf("\n........................PROFESSOR -- ALCIOMAR HOLLANDA.........................");
+    printf("\n\n\n\t\tBEM VINDO AO PROGRAMA DA NOSSA LOJA\n\n\n");
     system("pause");
 }
 
@@ -173,15 +180,15 @@ int main()
     do
     {
 
-        printf("\n         MENU");
+        printf("\n\n         MENU");
         printf("\n 1 - Listar Todos Produtos");
         printf("\n 2 - Comprar Produtos");
         printf("\n 3 - Cadastrar Clientes");
-        printf("\n 4 - Listar venda");
+        printf("\n 4 - Listar Vendas");
         printf("\n 5 - Listar Clientes");
         printf("\n 6 - Sair");
 
-        printf("\nDigite uma opcao: ");
+        printf("\n\n\n DIGITE UMA OPCAO: \n->");
         scanf("%d", &opcao);
         system("cls");
 
@@ -196,11 +203,11 @@ int main()
             system("pause");
             break;
         case 3:
-            printf("Cadastro de Clientes\n");
-            printf("\nDigite o nome do Cliente: ");
+            printf("CADASTRO DE CLIENTES\n");
+            printf("\nDIGITE O NOME DO CLIENTE: \n->");
             setbuf(stdin, NULL);
             gets(nome);
-            printf("\nDigite o telefone: ");
+            printf("\nDIGITE O TELEFONE: \n->");
             scanf("%d", &telefone);
             CadastraClientes(nome, telefone);
             system("pause");
@@ -214,13 +221,12 @@ int main()
             system("pause");
             break;
         case 6:
-            printf("\n\nFinalizando...\n\n");
-            system("pause");
+            printf("\n\nFINALIZANDO...\n\n");
             exit(0);
             break;
 
         default:
-            printf("\n\nOpcao invalida! Tente Novamente!\n\n");
+            printf("\n\nOPCAO INVALIDA! TENTE NOVAMENTE!\n\n");
             system("pause");
         }
     } while (condicao);
